@@ -1,4 +1,5 @@
 import Event from "./Event";
+import { randColor } from "./Utils";
 
 const GooFilter = () => (
   <svg
@@ -22,15 +23,16 @@ const GooFilter = () => (
 );
 
 const Timeline = ({ events }) => {
-  events = events.sort((a, b) => b.id - a.id);
+  events = events.sort((a, b) => b.id - a.id)
+           .filter((_, i) => i < 5);
   return (
     <>
       <GooFilter />
-      <div style={{ filter: "url('#goo')" }}>
-        {events.map((event, i, all) => {
+      <div style={{ filter: "url('#goo')"}}>
+        {events.map((event, i) => {
           console.log(event);
-          let startColor = all[i + 1]?.color || "red";
-          let endColor = event.color;
+          let startColor = randColor(event.id-1);
+          let endColor = randColor(event.id)
           console.log(`startColor: ${startColor} | endColor: ${endColor}`);
           
           return (

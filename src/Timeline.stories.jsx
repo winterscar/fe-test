@@ -41,8 +41,6 @@ const addMinute = (currentTime) => {
 
 const randString = () => Math.random().toString(36).substring(7);
 
-// Generate a random color hex code
-const randColor = () => "#" + Math.floor(Math.random() * 16777215).toString(16);
 
 const addEvent = (to) => {
   const latestEvent = to[to.length - 1];
@@ -50,15 +48,14 @@ const addEvent = (to) => {
     time: addMinute(latestEvent?.time),
     title: randString(),
     description: randString(),
-    id: to.length + 1,
-    color: randColor()
+    id: to.length + 1
   });
 };
 
 const Harness = () => {
   const [events, setEvents] = React.useState([]);
   return (
-    <div>
+    <div style={{backgroundColor: "#1E293B"}}>
       <button
         onClick={() => {
           addEvent(events);
