@@ -1,7 +1,11 @@
 import Event from "./Event";
 
 const GooFilter = () => (
-  <svg style={{display: "none"}} xmlns="http://www.w3.org/2000/svg" version="1.1">
+  <svg
+    style={{ display: "none" }}
+    xmlns="http://www.w3.org/2000/svg"
+    version="1.1"
+  >
     <defs>
       <filter id="goo">
         <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
@@ -17,15 +21,30 @@ const GooFilter = () => (
   </svg>
 );
 
-const Timeline = ({ events }) => (
-  <>
-    <GooFilter />
-    <div style={{ filter: "url('#goo')" }}>
-      {events.map((event) => (
-        <Event key={event.id} {...event} />
-      ))}
-    </div>
-  </>
-);
+const Timeline = ({ events }) => {
+  events = events.sort((a, b) => b.id - a.id);
+  return (
+    <>
+      <GooFilter />
+      <div style={{ filter: "url('#goo')" }}>
+        {events.map((event, i, all) => {
+          console.log(event);
+          let startColor = all[i + 1]?.color || "red";
+          let endColor = event.color;
+          console.log(`startColor: ${startColor} | endColor: ${endColor}`);
+          
+          return (
+            <Event
+              key={event.id}
+              {...event}
+              StartColor={startColor}
+              EndColor={endColor}
+            />
+          );
+        })}
+      </div>
+    </>
+  );
+};
 
 export default Timeline;
