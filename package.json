@@ -10,21 +10,28 @@
   },
   "author": "Mathieu Pasquet",
   "license": "ISC",
-  "dependencies": {
-    "styled-components": "^5.3.3"
-  },
   "peerDependencies": {
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.17.7",
+    "@babel/core": "^7.17.8",
     "@storybook/addon-actions": "^6.4.19",
     "@storybook/addon-essentials": "^6.4.19",
     "@storybook/addon-interactions": "^6.4.19",
     "@storybook/addon-links": "^6.4.19",
+    "@storybook/builder-webpack5": "^6.4.19",
+    "@storybook/manager-webpack5": "^6.4.19",
     "@storybook/react": "^6.4.19",
     "@storybook/testing-library": "^0.0.9",
-    "babel-loader": "^8.2.3"
+    "babel-loader": "^8.2.3",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "styled-components": "^5.3.3",
+    "webpack": "^5.70.0"
+  },
+  "dependencies": {
+    "lorem-ipsum": "^2.0.4",
+    "react-use": "^17.3.2"
   }
 }
