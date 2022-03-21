@@ -13,4 +13,6 @@ const randColor = (hueSeed) => {
     return `hsl(${hue}, ${saturation}%, ${luminance}%)`;
 }
 
-export { randColor };
+const animationBezier = "cubic-bezier(0.770, 0.000, 0.175, 1.000)";
+
+export { randColor, animationBezier };

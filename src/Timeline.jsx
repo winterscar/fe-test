@@ -22,7 +22,7 @@ const GooFilter = () => (
   </svg>
 );
 
-const Timeline = ({ events }) => {
+const Timeline = ({ events, mobile }) => {
   events = events.sort((a, b) => b.id - a.id)
            .filter((_, i) => i < 5);
   return (
@@ -30,18 +30,15 @@ const Timeline = ({ events }) => {
       <GooFilter />
       <div style={{ filter: "url('#goo')"}}>
         {events.map((event, i) => {
-          console.log(event);
           let startColor = randColor(event.id-1);
           let endColor = randColor(event.id)
-          console.log(`startColor: ${startColor} | endColor: ${endColor}`);
           
           return (
-            <Event
+            <Event 
               key={event.id}
               {...event}
-              StartColor={startColor}
-              EndColor={endColor}
-              mobile={true}
+              {...{startColor, endColor, mobile}}
+              showPath={!(i === events.length - 1)}
             />
           );
         })}
