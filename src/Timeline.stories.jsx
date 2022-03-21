@@ -1,5 +1,6 @@
 import React from "react";
 import Timeline from "./Timeline";
+import { loremIpsum } from "lorem-ipsum";
 
 export default {
   title: "Components/Timeline",
@@ -24,14 +25,6 @@ const events = [
   // {time: '14:00', title: 'Networking', description: 'Networking is served!'}
 ];
 
-// Create a master template for mapping args to render the Timeline component
-const Template = (args) => <Timeline {...args} />;
-
-export const BasicTimeline = Template.bind({});
-BasicTimeline.args = { events: events };
-
-let dynamicEvents = [];
-
 const addMinute = (currentTime) => {
   currentTime = currentTime ? currentTime : "10:00";
   const [hours, minutes] = currentTime.split(":");
@@ -40,14 +33,14 @@ const addMinute = (currentTime) => {
 };
 
 const randString = () => Math.random().toString(36).substring(7);
-
+const randInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 
 const addEvent = (to) => {
   const latestEvent = to[to.length - 1];
   to.push({
     time: addMinute(latestEvent?.time),
-    title: randString(),
-    description: randString(),
+    title: loremIpsum({ count: randInt(1, 5) , units: "words" }),
+    description:  loremIpsum({ count: randInt(5, 500) , units: "words" }),
     id: to.length + 1
   });
 };

@@ -41,6 +41,7 @@ const Timeline = ({ events }) => {
               {...event}
               StartColor={startColor}
               EndColor={endColor}
+              mobile={true}
             />
           );
         })}
