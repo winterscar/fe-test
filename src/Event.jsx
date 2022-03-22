@@ -1,73 +1,37 @@
-import React from "react";
-import styled, {keyframes} from 'styled-components'
+import styled from "styled-components";
+import React, {useLayoutEffect} from 'react'
+import { useMeasure } from "react-use";
+import AnimatedListItem from './AnimatedListItem'
+import EventContent from "./EventContent";
+import TimelineSection from "./TimelinePath";
 
-const Event = ({time, title, description, id, StartColor, EndColor}) => {
-    console.log(`rendering element ${id}`)
-    return(
-    <Wrapper StartColor={StartColor} EndColor={EndColor}>
-        {id > 1 && <div className="timeline"></div>}
-        <div className="blob"></div>
-        <div className='content'>
-            <h1>{title}</h1>
-            <span>{time}</span>
-            <span>{description}</span>
-        </div>
-    </Wrapper>
-)}
 
-const timelineAnimation = keyframes`
-    from {height: 0px;}
-    to {height: 150px;}
-`
+const Event = ({details,startColor,endColor,mobile,showPath,side}) => {
+  
+  // This combination of useMeasure and UseEffect allows us to only run the animation once
+  const [ref, {height}] = useMeasure();
+  const [heightPx, setHeightPx] = React.useState(0);
+  useLayoutEffect(() => {if (heightPx === 0) {setHeightPx(height)}}, [height])
+  
+  let children = [ (!mobile ? <div key={0}></div> : undefined),
+                   <TimelineSection key={1} {...{startColor, endColor, heightPx, showPath}} />,
+                   <EventContent key={2} {...details} {...{side}} />]
 
-const blobAnimation = props => keyframes`
-    0% {
-      transform: translate(0,0);
-      background-color: ${props.StartColor};
-    }
-    10% {
-        background-color: ${props.StartColor};
-    }
-    100%{
-      background-color: ${props.EndColor};
-      transform: translate(0,-200px);
-    }
-`
-
-const wrapperAnimation = keyframes`
-    0% {height: 0px; opacity: 0;}
-    50% {height: 200px; opacity: 0;}
-    100% {height: 200px; opacity: 1;}
-`
+  return (
+    <AnimatedListItem>
+      <Wrapper {...{startColor, endColor, mobile, ref, heightPx}}>
+              {side === 'right' ? children : children.reverse()}
+      </Wrapper>
+    </AnimatedListItem>
+  );
+};
 
 const Wrapper = styled.div`
-    position: relative;
-    filter:url('#goo');
-    animation: ${wrapperAnimation} 0.5s ease-in-out both;
-
-  .content {
-    position: absolute;
-    left:50px;
-    font-size: 0.5em;
-  }
-  .timeline { 
-    width: 4px;
-    margin-left: 10px;
-    border-radius: 3px;
-    bottom: 10px;
-    background: black;
-    position: absolute;
-    animation: ${timelineAnimation} 1.1s cubic-bezier(0.770, 0.000, 0.175, 1.000) 1100ms both;
-  }
-  
-  .blob{
-    top: 200px;
-    position: absolute;
-    width:24px;
-    height:24px;
-    border-radius:100%;
-    animation: ${blobAnimation} 2s cubic-bezier(0.770, 0.000, 0.175, 1.000) 500ms both;
-  }
-`
+  position: relative;
+  filter: url("#goo");
+  display: grid;
+  grid-template-columns: ${(props) => props.mobile ? "65px 1fr" : "1fr 65px 1fr"};
+  min-height: 100px;
+`;
 
 export default React.memo(Event);

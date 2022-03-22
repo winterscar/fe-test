@@ -1,75 +1,62 @@
 import React from "react";
 import Timeline from "./Timeline";
+import { useInterval } from "react-use";
+import styled from "styled-components";
+import { makeEvent } from "./Utils";
 
 export default {
   title: "Components/Timeline",
   component: Timeline,
 };
 
-const events = [
-  {
-    time: "10:00",
-    title: "Registration",
-    description: "Registration is open!",
-    id: 1,
-  },
-  {
-    time: "10:30",
-    title: "Opening",
-    description: "Welcome to the conference!",
-    id: 2,
-  },
-  // {time: '11:00', title: 'Keynote', description: 'This is the keynote!'},
-  // {time: '12:00', title: 'Lunch', description: 'Lunch is served!'},
-  // {time: '14:00', title: 'Networking', description: 'Networking is served!'}
-];
+/**
+ * Add an Event to the list of events.
+ * @param {[]} events An array of event objects. Must have an ID property.
+ * @param {() => void} setEvents A function to call with the upserted array of events.
+ * @param {number} Eventlimit The maximum number of events to show. If the number of events is greater than this, the oldest events will be removed.
+ */
+const addEvent = (events, setEvents, Eventlimit) => {
+  const id = (events[events.length - 1]?.id + 1) || 0; // monotinically increasing id
+  while (events.length > Eventlimit - 1) {events.shift()}; // remove first element if more than limit
+  setEvents([...events, makeEvent(id)]);
+}
 
-// Create a master template for mapping args to render the Timeline component
-const Template = (args) => <Timeline {...args} />;
-
-export const BasicTimeline = Template.bind({});
-BasicTimeline.args = { events: events };
-
-let dynamicEvents = [];
-
-const addMinute = (currentTime) => {
-  currentTime = currentTime ? currentTime : "10:00";
-  const [hours, minutes] = currentTime.split(":");
-  const newMinutes = parseInt(minutes) + 1;
-  return `${hours}:${newMinutes}`;
-};
-
-const randString = () => Math.random().toString(36).substring(7);
-
-// Generate a random color hex code
-const randColor = () => "#" + Math.floor(Math.random() * 16777215).toString(16);
-
-const addEvent = (to) => {
-  const latestEvent = to[to.length - 1];
-  to.push({
-    time: addMinute(latestEvent?.time),
-    title: randString(),
-    description: randString(),
-    id: to.length + 1,
-    color: randColor()
-  });
-};
-
-const Harness = () => {
+/**
+ * Test Harness for the Timeline component. The harness generates a
+ * new event on a timer, and allows you to visualize both mobile and desktop
+ * versions of the timeline.
+ * @param {boolean} mobile Should the timeline be displayed in mobile mode?
+ * @param {number} eventLimit The maximum number of events to show.
+ * @param {number} addItemFrequencyMs How often to add a new event (in milliseconds).
+ * @returns {React.Component} A react component
+ */
+const Harness = ({mobile, eventLimit, addItemFrequencyMs}) => {
   const [events, setEvents] = React.useState([]);
+
+  useInterval(() => {addEvent(events, setEvents, eventLimit)}, addItemFrequencyMs)
+
   return (
-    <div>
-      <button
-        onClick={() => {
-          addEvent(events);
-          setEvents([...events]);
-        }}
-      >
-        Add Event
-      </button>
-      <Timeline events={events} />
-    </div>
+    <TimelineWrapper>
+      <Timeline events={events} mobile={mobile} />
+    </TimelineWrapper>
   );
 };
 
-export const TimelineHarness = Harness;
+const TimelineWrapper = styled.div`
+  width: 100%;
+  max-width: 800px;
+`
+
+export const Desktop = Harness.bind({});
+Desktop.args = {
+  mobile: false,
+  eventLimit: 5,
+  addItemFrequencyMs: 5000
+};
+
+export const Mobile = Harness.bind({});
+Mobile.args = {
+  mobile: true,
+  eventLimit: 5,
+  addItemFrequencyMs: 5000
+};
