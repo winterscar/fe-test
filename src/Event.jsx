@@ -3,7 +3,7 @@ import React, {useLayoutEffect} from 'react'
 import { useMeasure } from "react-use";
 import AnimatedListItem from './AnimatedListItem'
 import EventContent from "./EventContent";
-import TimelinePath from "./TimelinePath";
+import TimelineSection from "./TimelinePath";
 
 
 const Event = ({details,startColor,endColor,mobile,showPath,side}) => {
@@ -14,7 +14,7 @@ const Event = ({details,startColor,endColor,mobile,showPath,side}) => {
   useLayoutEffect(() => {if (heightPx === 0) {setHeightPx(height)}}, [height])
   
   let children = [ (!mobile ? <div key={0}></div> : undefined),
-                   <TimelinePath key={1} {...{startColor, endColor, heightPx, showPath}} />,
+                   <TimelineSection key={1} {...{startColor, endColor, heightPx, showPath}} />,
                    <EventContent key={2} {...details} {...{side}} />]
 
   return (
@@ -25,8 +25,6 @@ const Event = ({details,startColor,endColor,mobile,showPath,side}) => {
     </AnimatedListItem>
   );
 };
-
-
 
 const Wrapper = styled.div`
   position: relative;

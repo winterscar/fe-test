@@ -4,7 +4,7 @@ import { animationBezier } from "./Utils";
 // The radius of the blob
 const radius = 24; // px
 
-const TimelinePath = ({startColor, endColor, heightPx, showPath}) => (
+const TimelineSection = ({startColor, endColor, heightPx, showPath}) => (
   <Wrapper {...{startColor, endColor, heightPx}}>
     {showPath && <div className="timeline"></div>}
     <div className="blob"></div>
@@ -48,7 +48,7 @@ const Wrapper = styled.div`
     bottom: 15px;
     background: white;
     position: absolute;
-    animation: ${timelineAnimation} 1.1s ${animationBezier} 1100ms backwards;
+    animation: ${timelineAnimation} 1.1s ${animationBezier} 1150ms backwards;
   }
 
   & .blob {
@@ -63,4 +63,4 @@ const Wrapper = styled.div`
   }
 `
 
-export default TimelinePath;
+export default TimelineSection;
