@@ -1,6 +1,9 @@
 import styled, {keyframes} from "styled-components";
 import { animationBezier } from "./Utils";
 
+// The radius of the blob
+const radius = 24; // px
+
 const TimelinePath = ({startColor, endColor, heightPx, showPath}) => (
   <Wrapper {...{startColor, endColor, heightPx}}>
     {showPath && <div className="timeline"></div>}
@@ -9,25 +12,25 @@ const TimelinePath = ({startColor, endColor, heightPx, showPath}) => (
 )  
 
 const timelineAnimation = props => keyframes`
-    from {height: 0px;}
-    to {height: ${props.heightPx - (20*2 + 30)}px;}
+  from {height: 0px;}
+  to {height: ${props.heightPx - (radius + 2*15)}px;}
 `;
 
 const blobAnimation = (props) => keyframes`
   0% {
-    bottom: -40px;
+    bottom: -${radius}px;
     top: unset;
     transform: translate(0,0);
     background-color: ${props.startColor};
   }
   10% {
     top: unset;
-    bottom: -40px;
+    bottom: -${radius}px;
     background-color: ${props.startColor};
   }
   100%{
     top: unset;
-    bottom: -40px;
+    bottom: -${radius}px;
     background-color: ${props.endColor};
     transform: translate(0,-${props.heightPx}px);
   }
@@ -38,9 +41,9 @@ const Wrapper = styled.div`
   height: 100%;
   
   & .timeline {
-    left: calc(50% - 2px);
+    left: calc(50% - 4px);
     width: 4px;
-    height: calc(100% - 70px);
+    height: calc(100% - ${radius + 2*15}px);
     border-radius: 4px;
     bottom: 15px;
     background: white;
@@ -49,11 +52,11 @@ const Wrapper = styled.div`
   }
 
   & .blob {
-    left: calc(50% - 20px);
+    left: calc(50% - 15px);
     top: 0;
     position: absolute;
-    width: 40px;
-    height: 40px;
+    width: ${radius}px;
+    height: ${radius}px;
     border-radius: 100%;
     background-color: ${props => props.endColor};
     animation: ${blobAnimation} 2s ${animationBezier} 500ms backwards;

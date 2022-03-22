@@ -4,14 +4,14 @@ const EventContent = ({time, title, description, side}) => {
   let content;
   if (side === "right") {
     content = <>
-                <h1>{title}</h1>
-                <span>{time}</span>
+                <span class='title'>{title}</span>
+                <span class='title'>{time.toLocaleTimeString()}</span>
                 <span className='description'>{description}</span>
               </>
   } else if (side === "left") {
     content = <>
-                <span>{time}</span>
-                <h1>{title}</h1>
+                <span class='title'>{time.toLocaleTimeString()}</span>
+                <span class='title'>{title}</span>
                 <span className='description'>{description}</span>
               </>
   } else {
@@ -38,17 +38,24 @@ const contentAnimation = keyframes`
 `
 
 const Wrapper = styled.div`
-  font-family: sans-serif;
-  color: white;
+  font-size : 14px;
+  font-family: 'segoe ui', 'open sans', 'helvetica neue', arial, sans-serif;
+  font-style: normal;
+  color: #D0D0D0;
   animation: ${contentAnimation} 0.1s ease-out 1.5s both;
   display: grid;
-  grid-template-columns: ${props => props.side === 'right' ? "1fr 30px" : "30px 1fr"};
+  grid-template-columns: ${props => props.side === 'right' ? "1fr auto" : "auto 1fr"};
+  grid-template-rows: auto 1fr;
   height: 100%;
 
   ${props => props.side === 'left' && css`text-align: right;`}
 
   & .description {
     grid-column: 1 / span 2;
+  }
+
+  & .title {
+    font-weight: 700;
   }
 `
 

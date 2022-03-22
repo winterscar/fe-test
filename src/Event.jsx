@@ -6,18 +6,16 @@ import EventContent from "./EventContent";
 import TimelinePath from "./TimelinePath";
 
 
-const Event = ({time,title,description,id,startColor,endColor,mobile,showPath}) => {
+const Event = ({details,startColor,endColor,mobile,showPath,side}) => {
   
   // This combination of useMeasure and UseEffect allows us to only run the animation once
   const [ref, {height}] = useMeasure();
   const [heightPx, setHeightPx] = React.useState(0);
   useLayoutEffect(() => {if (heightPx === 0) {setHeightPx(height)}}, [height])
-
-  let side = (mobile || id % 2 === 0) ? "right" : "left";
   
   let children = [ (!mobile ? <div key={0}></div> : undefined),
                    <TimelinePath key={1} {...{startColor, endColor, heightPx, showPath}} />,
-                   <EventContent key={2} {...{time, title, description, side}} />]
+                   <EventContent key={2} {...details} {...{side}} />]
 
   return (
     <AnimatedListItem>

@@ -23,21 +23,23 @@ const GooFilter = () => (
 );
 
 const Timeline = ({ events, mobile }) => {
-  events = events.sort((a, b) => b.id - a.id)
-           .filter((_, i) => i < 5);
+  // Create a copy of the array (reverse is in place), 
+  // and reverse it so that we show events top to bottom.
+  events = [...events].reverse();
   return (
     <>
       <GooFilter />
       <div style={{ filter: "url('#goo')"}}>
-        {events.map((event, i) => {
-          let startColor = randColor(event.id-1);
-          let endColor = randColor(event.id)
+        {events.map((details, i) => {
+          let id = details.id
+          let side = (mobile || id % 2 === 0) ? "right" : "left";
+          let startColor = randColor(id-1);
+          let endColor = randColor(id)
           
           return (
             <Event 
-              key={event.id}
-              {...event}
-              {...{startColor, endColor, mobile}}
+              key={id}
+              {...{details, startColor, endColor, mobile, side}}
               showPath={!(i === events.length - 1)}
             />
           );
